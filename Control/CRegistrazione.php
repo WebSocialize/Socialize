@@ -1,7 +1,7 @@
 <?php
 
 /*
- * Classe registrazione
+ * Classe registrazione CASA
  */
 
 class CRegistrazione {
