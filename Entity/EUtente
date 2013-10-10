@@ -1,0 +1,22 @@
+<?php
+class EUtente {
+    public $nome;
+    public $cognome;
+    public $password;
+    public $email;
+    public $citta;
+    public $sesso;
+    public $datanascita;
+    public function __construct($name,$surname,$pwd,$mail,$city,$sex,$date)
+    {
+        $this->nome=$name;
+        $this->cognome=$surname;
+        $this->password=$pwd;
+        $this->email=$mail;
+        $this->citta=$city;
+        $this->sesso=$sex;
+        $this->datanascita=$date;
+    }
+}
+
+?>
