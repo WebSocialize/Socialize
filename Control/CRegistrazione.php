@@ -2,6 +2,7 @@
 
 /*
  * Classe registrazione CASA
+ abitacolo
  */
 
 class CRegistrazione {
