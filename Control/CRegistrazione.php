@@ -56,7 +56,7 @@ class CRegistrazione {
     }
     
     /*
-     * attivazione
+     * conferma attivazione
      */
     public function attivazione() {
         
