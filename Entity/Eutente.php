@@ -68,7 +68,7 @@ class Eutente {
     }
     
     /*
-     * restituisce l'email
+     * Restituisce l'email
      */
     public function getEmail(){
         return $this->email;
