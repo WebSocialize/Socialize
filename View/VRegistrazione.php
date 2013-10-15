@@ -31,11 +31,12 @@ class VRegistrazione {
      */
     public function getDati() {
         $dati = array( 'nome', 'cognome', 'email', 'password', 'conf_password', 'sesso', 'citta', 'data_nas' );
+        $daticompilati=array();
         foreach ( $dati as $data ) {
             if( isset( $_REQUEST[ $data ] ) )
-                $dati[ $data ] = $_REQUEST[ $data ];
+                $daticompilati[ $data ] = $_REQUEST[ $data ];
         }
-        return $dati;    
+        return $daticompilati;    
     }
     
     /*
