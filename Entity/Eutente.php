@@ -14,8 +14,15 @@ class Eutente {
     private $pwd;
     private $citta;
     private $email;
+    private $codice;
     
     //metodi
+    /*
+     * genera un codice di attivazione casuale per l'attivazione dell'account via mail
+     */
+    public function generaCodiceAttivazione() {
+        $this->codice=mt_rand();
+    }
     /*
      *   restituisce il nome
      */
