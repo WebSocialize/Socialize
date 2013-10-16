@@ -31,12 +31,11 @@ class VRegistrazione {
      */
     public function getDati() {
         $dati = array( 'nome', 'cognome', 'email', 'password', 'conf_password', 'sesso', 'citta', 'data_nas' );
-        $daticompilati=array();
         foreach ( $dati as $data ) {
             if( isset( $_REQUEST[ $data ] ) )
-                $daticompilati[ $data ] = $_REQUEST[ $data ];
+                $dati[ $data ] = $_REQUEST[ $data ];
         }
-        return $daticompilati;    
+        return $dati;    
     }
     
     /*
@@ -44,7 +43,14 @@ class VRegistrazione {
      */
     public function stampaErrore( $errore ){
         //assegna $errore al template relativo
-    } 
+    }
+    
+    public function getDatiAttivazione() {
+        if(isset($_REQUEST['codice_attivazione']) && isset($_REQUEST['email']))
+            return array('codice'=>$_REQUEST['codice_attivazione'], 'username'=>$_REQUEST['username']);
+        else
+            return false;
+    }
 }
 
 ?>

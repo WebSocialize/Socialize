@@ -51,14 +51,32 @@ class CRegistrazione {
     /*
      * email attivazione
      */
-    public function EmailAttiv() {
-        
+    public function EmailAttiv( Eutente $user ) {
+        global $config;    //INSERIRE
+        $vista = USingleton::getInstance( 'VRegistrazione' );
+        $vista->setLayout( 'email_attivazione' );
+        $vista->impostaDati( 'email',  $user->getEmail() );
+        $vista->impostaDati( 'nome', $user->getNome().' '.$user->getCognome() );
+        $vista->impostaDati( 'codice_attivazione',$utente->getCodiceAttivazione() );
+        $vista->impostaDati( 'email_webmaster',$config['email_webmaster'] );
+        $corpo_email=$view->processaTemplate();
+        $email=USingleton::getInstance( 'UEmail' );
+        return $email->invia_email( $utente->email,$utente->nome.' '.$utente->cognome,'Attivazione account Socialize',$corpo_email );
     }
     
     /*
-     * conferma attivazione
+     * attivazione
      */
-    public function attivazione() {
+    public function attivazione(  ) {
+        $view = USingleton::getInstance( 'VRegistrazione' );
+        $data = $view->getDatiAttivazione();
+        $Fuser = new FUtente();
+        $user = $Fuser->load( $data[ 'email' ] );
+        $user->attivazione = true;
+        $Fuser->update( $user );
+        $view->setLayout('conferma_attivazione');
+        
+        return processaTemplate();
         
     }
     

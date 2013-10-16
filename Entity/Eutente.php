@@ -7,14 +7,15 @@
 class Eutente {
     
     //attributi
-    private $nome;
-    private $cognome;
-    private $data_nas;
-    private $sesso;
-    private $pwd;
-    private $citta;
-    private $email;
-    private $codice;
+    public $nome;
+    public $cognome;
+    public $data_nas;
+    public $sesso;
+    public $pwd;
+    public $citta;
+    public $email;
+    public $codice;
+    public $attivazione = false;
     
     //metodi
     /*
@@ -38,6 +39,15 @@ class Eutente {
         
     }
     
+    /*
+     * restituisce il codice attivazione
+     */
+    public function getCodiceAttivazione(){
+        return $this->codice;
+    
+    }
+
+
     /*
      * restituisce la data di nascita
      */
@@ -68,7 +78,7 @@ class Eutente {
     }
     
     /*
-     * Restituisce l'email
+     * restituisce l'email
      */
     public function getEmail(){
         return $this->email;
