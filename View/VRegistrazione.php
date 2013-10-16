@@ -1,6 +1,6 @@
 <?php
 
-class VRegistrazione {
+class VRegistrazione extends View{
     
     //attributi
     
