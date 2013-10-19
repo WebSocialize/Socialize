@@ -7,19 +7,17 @@ class CHome{
         $VHome = USingleton::getInstance( 'VHome' );
         
        // $CRegistrazione=USingleton::getInstance('CRegistrazione');
-        //$registrato=$CRegistrazione->getUtenteRegistrato();
+       // $registrato=$CRegistrazione->getUtenteRegistrato();
         $contenuto=$this->smista();
-        
-        $VHome->impostaTastiCategorie($categorie);
-        $VHome->impostaContenuto($contenuto);
+        $VHome->imposta_side( $contenuto );
        /* if ($registrato) {
          *   $VHome->impostaPaginaRegistrato();
         *} else {
         *   $VHome->impostaPaginaGuest();
-        *}
-        *$VHome->mostraPagina();
-        *
+        }
+        * 
         */
+        $VHome->mostraPagina();
     }
     
     public function smista(){
