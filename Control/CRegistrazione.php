@@ -19,9 +19,10 @@ class CRegistrazione {
          * a VRegistrazione.
          * Prima bisogna capire come usare Singleton per fare una sola istanza etc
          */
+        $user = new FUtente();
         $view = USingleton::getInstance( 'VRegistrazione' );
         $dat_reg = $view->getDati();       //dati immessi dall'utente
-        $result = load( $dat_reg[ 'email' ] );
+       /* $result*/ echo $user->load( $dat_reg[ 'email' ] );
         $errore;
         if( !$result ){
             //email non usata ancora
@@ -42,9 +43,8 @@ class CRegistrazione {
         }
         
         if( !$errore ){
-            /*
-             * DOBBIAMO VEDERE LA PARTE RELATIVA AI TEMPLATE!!!
-             */
+            $contenuto = array(
+                'main'=> $view->setTemplate( 'conferma_registrazione.tpl' ));
         }
     }
     
@@ -82,22 +82,28 @@ class CRegistrazione {
     
     public function smista() {
         $view=USingleton::getInstance('VRegistrazione');
-        //switch ($view->getTask()) {
-         //   case 'recupera_password':
-         //       return $this->recuperaPassword();
-          //  case 'registra':
-                return $this->setModReg();
-        //    case 'salva':
-          //      return $this->creaUtente();
-        //    case 'attivazione':
-         //       return $this->attivazione();
+        switch ($view->getTask()) {
+            case 'recupera_password':
+                return $this->recuperaPassword();
+            
+            case 'salva':
+                return $this->creaUtente();
+            case 'attivazione':
+                return $this->attivazione();
+                
+            default :
+            {
+                 $result = array(
+                 'side'=> $view->setTemplate('registrazione_modulo.tpl'), 
+                 'main'=> $view->setTemplate('contenuto_home.tpl') );
+                 return $result;
+            }    
         }
+       
+       
     }
     
-    public function setModReg(){
-        $registrazione = USingleton::getInstance( 'VRegistrazione' );
-        return $registrazione->fetch( 'registrazione_modulo.tpl' );
-    }
+    
     
 }
 

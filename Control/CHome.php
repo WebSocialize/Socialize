@@ -6,10 +6,11 @@ class CHome{
     public function costruisci(){
         $VHome = USingleton::getInstance( 'VHome' );
         
-       // $CRegistrazione=USingleton::getInstance('CRegistrazione');
-       // $registrato=$CRegistrazione->getUtenteRegistrato();
+        $CRegistrazione=USingleton::getInstance('CRegistrazione');
+   //     $registrato=$CRegistrazione->getUtenteRegistrato();
         $contenuto=$this->smista();
-        $VHome->imposta_side( $contenuto );
+        $VHome->imposta_side( $contenuto ['side']); 
+        $VHome->imposta_main( $contenuto['main'] );
        /* if ($registrato) {
          *   $VHome->impostaPaginaRegistrato();
         *} else {
@@ -17,28 +18,28 @@ class CHome{
         }
         * 
         */
-        $VHome->mostraPagina();
+        $VHome->setPagina();
     }
     
     public function smista(){
         
         $view=USingleton::getInstance('VHome');
-       // switch ($view->getController()) {
-       //   case 'registrazione':
+        switch ($view->getController()) {
+          case 'registrazione':
                 $CRegistrazione=USingleton::getInstance('CRegistrazione');
                 return $CRegistrazione->smista();
-       /*     case 'ricerca':
+            case 'ricerca':
                 $CRicerca=USingleton::getInstance('CRicerca');
                 return $CRicerca->smista();
             case 'ordine':
                 $COrdine=USingleton::getInstance('COrdine');
                 return $COrdine->smista();
             default:
-                $CRicerca=USingleton::getInstance('CRicerca');
-                return $CRicerca->ultimiArrivi();
+                $CRegistrazione=USingleton::getInstance('CRegistrazione');
+                return $CRegistrazione->smista();
         }
         
-        */
+       
     }
 }
 
