@@ -3,7 +3,7 @@
  * classe view inizializza smarty e il suo ambiente di lavoro
  */
 
-require '/lib/smarty/Smarty.class.php/';
+require 'lib/smarty/Smarty.class.php';
 
 class View extends Smarty {
     public function __construct() {

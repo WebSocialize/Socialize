@@ -9,28 +9,48 @@ class FDb{
     protected $tabella;     //
     protected $key;
     protected $class;
-    protected $connection;
+    protected $_connection;
 
 
     //metodi
     public function __construct() {
-        ;
+        global $config;
+        $this->connect($config['mysql']['host'], $config['mysql']['password'], $config['mysql']['user'], $config['mysql']['database']);
     }
     
-    public function connect($dataBase, $user, $password) {
+//   public function connect($dataBase, $user, $password) {
         /*
          * connessione al server mysql e connessione ad un database passato per parametro  
          */
-        $this->connection = mysql_connect('localhost', $user, $password);
+    /*
+        $this->connection = mysql_connect('localhost', $password, $user);
         if( !$this->connection ) {
             die( 'impossibile connettersi al server specificato' );
-        }
+        }   
         else
             $selected = mysql_select_db ( $dataBase, $this->connection );
         if( !$selected )
             die( 'impossibile connettersi al Db specificato' );
         
         return true;
+    }
+     */ 
+    
+    
+    public function connect($host,$user,$password,$database) {
+        $this->_connection=mysql_connect($host,$password,$user);
+        if (!$this->_connection) {
+            die('Impossibile connettersi al database: ' . mysql_error());
+        }
+        $db_selected = mysql_select_db($database, $this->_connection); echo $database;
+        if (!$db_selected) {
+            die ("Impossibile utilizzare $database: " . mysql_error());
+        }
+        debug('Connessione al database avvenuta correttamente');
+
+        $this->query('SET names \'utf8\'');
+        return true;
+
     }
     
     /*

@@ -51,6 +51,18 @@ class VRegistrazione extends View{
         else
             return false;
     }
+    
+    public function setTemplate( $template ){
+        $registrazione = USingleton::getInstance( 'VRegistrazione' );
+        return $registrazione->fetch( $template );
+    }
+    
+        public function getTask() {
+        if (isset($_REQUEST['task']))
+            return $_REQUEST['task'];
+        else
+            return false;
+    }
 }
 
 ?>

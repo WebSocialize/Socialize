@@ -1,100 +1,33 @@
 <?php
 
-class VHome extends View {
+class VHome extends View{
+    //attributi
+    public $_main_content;
+    public $_side_content;
+    public $_template = 'default';
     
-    private $_main_content;
+    //metodi
+    public function imposta_main( $contenuto ){
+        $this->_main_content = $contenuto;
+    }
     
-    private $_main_button=array();
-
-    private $_side_content;
-
-    private $_side_button=array();
-
-    private $_layout='default';
- 
-    public function aggiungiModuloLogin() {
-        $VRegistrazione=USingleton::getInstance('VRegistrazione');
-        $VRegistrazione->setLayout('default');
-        $modulo_login=$VRegistrazione->processaTemplate();
-        $this->_side_content.=$modulo_login;
-
+    public function imposta_side( $contenuto ){
+        $this->_side_content = $contenuto;
     }
-    /**
-     * Assegna il contenuto al template e lo manda in output
-     */
-    public function mostraPagina() {
-        $this->assign('right_content',$this->_side_content);
-        $this->assign('tasti_laterali',$this->_side_button);
-        $this->display('home_'.$this->_layout.'.tpl');
+    
+    public function setPagina(){
+        $this->assign( 'main_content', $this->_main_content );
+        $this->assign( 'side_content', $this->_side_content );
+        $this->display( 'home_'.$this->_template.'.tpl' );
     }
-    /**
-     * imposta il contenuto principale alla variabile privata della classe
-     */
-    public function impostaContenuto($contenuto) {
-        $this->_main_content=$contenuto;
-    }
-    /**
-     * Restituisce il controller passato tramite richiesta GET o POST
-     *
-     * @return mixed
-     */
+    
     public function getController() {
         if (isset($_REQUEST['controller']))
             return $_REQUEST['controller'];
         else
             return false;
     }
-    /**
-     * Imposta la pagina per gli utenti registrati/autenticati
-     */
-    public function impostaPaginaRegistrato() {
-        $session=USingleton::getInstance('USession');
-        $this->assign('title','Bookstore');
-        $nome_cognome=$session->leggi_valore('nome_cognome');
-        $this->assign('content_title','Benvenuto '.$nome_cognome);
-        $this->assign('main_content',$this->_main_content);
-        $this->assign('menu',$this->_main_button);
-        $this->aggiungiTastoLogout();
-    }
-    /*
-     * imposta la pagina per gli utenti non registrati/autenticati
-     */
-    public function impostaPaginaGuest() {
-        $this->assign('title','Bookstore');
-        $this->assign('content_title','Benvenuto ospite');
-        $this->assign('main_content',$this->_main_content);
-        $this->assign('menu',$this->_main_button);
-        $this->aggiungiModuloLogin();
-        $this->aggiungiTastoRegistrazione();
-    }
-    /**
-     * aggiunge il tasto logout al menu laterale
-     */
-    public function aggiungiTastoLogout() {
-        $tasto_logout=array();
-        $tasto_logout[]=array('testo' => 'Logout', 'link' => '?controller=registrazione&task=esci');
-        $this->_side_button=array_merge($tasto_logout,$this->_side_button);
-    }
-    /**
-     * aggiunge il tasto per la registrazione nel menu laterale (per gli utenti non autenticati)
-     */
-    public function aggiungiTastoRegistrazione() {
-        $menu_registrazione=array();
-        $menu_registrazione[]=array('testo' => 'Attivati', 'link' => '?controller=registrazione&task=attivazione');
-        $this->_side_button[]=array_merge(array('testo' => 'Registrati', 'link' => '?controller=registrazione&task=registra', 'submenu' => $menu_registrazione),$this->_side_button);
-    }
-    /**
-     * imposta i tasti per le categorie nel menu principale
-     */
-    public function impostaTastiCategorie($categorie){
-        $sotto_tasti=array();
-        $tasti=array();
-        foreach ($categorie as $categoria){
-            $sotto_tasti[]=array('testo' => $categoria['categoria'], 'link' => '?controller=ricerca&task=lista&categoria='.$categoria['categoria']);
-        }
-        $tasti[]=array('testo' => 'Categorie', 'link' => '#', 'submenu' => $sotto_tasti);
-        $this->_main_button=$tasti;
-    }
+    
 }
 
 ?>
