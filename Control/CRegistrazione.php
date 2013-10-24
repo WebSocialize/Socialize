@@ -9,7 +9,8 @@ class CRegistrazione {
     //attributi
     private $email;
     private $password;
-    
+    private $errore='';
+
     //metodi
     public function CreaUtente(){
         /*
@@ -21,32 +22,32 @@ class CRegistrazione {
          */
         $user = new FUtente();
         $view = USingleton::getInstance( 'VRegistrazione' );
-        $dat_reg = $view->getDati();       //dati immessi dall'utente
-       /* $result*/ echo $user->load( $dat_reg[ 'email' ] );
-        $errore;
+        $dat_reg = $view->getDati();
+             //dati immessi dall'utente
+        $result=$user->load( $dat_reg[ 'email' ] ); 
         if( !$result ){
             //email non usata ancora
-            if( $dat_reg[ 'password' ] == $dat_reg[ 'conf_password' ]){
-                $utente = new Eutente($dat_reg['nome'], $dat_reg['cognome'], $dat_reg['data_nas'], $dat_reg['password'], $dat_reg['sesso'], $dat_reg['email'], $dat_reg['citta']);
+            if( $dat_reg['password']==$dat_reg['conf_password']){
+                $utente = new Eutente($dat_reg['nome'], $dat_reg['cognome'], $dat_reg['giorno'], $dat_reg['mese'],$dat_reg['anno'],$dat_reg['sesso'], $dat_reg['password'], $dat_reg['comune'],$dat_reg['email']);
                 $utente->generaCodiceAttivazione();
                 $Fuser = new FUtente();
                 $Fuser->store($utente);
-                $this->EmailAttiv();
+                //$this->EmailAttiv();
             }
             else{
                 //le password non coincidono
-                $errore = 'Le password inserite non coincidono!';
+                $errore='Le password inserite non coincidono!';
             }
         }    
-        else{
-            $errore = 'usare un\' altra mail: quella inserita è già stata immessa!';
-        }
-        
-        if( !$errore ){
+        else   $errore = 'usare un\' altra mail: quella inserita è già stata immessa!';
+        if( !$this->errore ){
             $contenuto = array(
-                'main'=> $view->setTemplate( 'conferma_registrazione.tpl' ));
+                'main'=> $view->setTemplate( 'conferma_registrazione.tpl' ),'side'=>$view->setTemplate('vuoto.tpl'));
+                return $contenuto;
         }
-    }
+
+    
+}
     
     /*
      * email attivazione

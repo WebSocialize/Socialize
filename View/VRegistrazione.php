@@ -29,11 +29,23 @@ class VRegistrazione extends View{
     /*
      * restituisce i dati inseriti nella form per la restituzione e li inserisce in un array
      */
-    public function getDati() {
-        $dati = array( 'nome', 'cognome', 'email', 'password', 'conf_password', 'sesso', 'citta', 'data_nas' );
-        foreach ( $dati as $data ) {
+    /*public function getDati() {
+        $datitipo = array( 'nome', 'cognome', 'email', 'password', 'conf_password', 'data_nas','sesso', 'comune' );
+        $dati=array();
+        foreach ( $datitipo as $data ) {
             if( isset( $_REQUEST[ $data ] ) )
-                $dati[ $data ] = $_REQUEST[ $data ];
+              {  $dati[ $data ] = $_REQUEST[ $data ];
+                echo $dati[$data];}
+        }
+        return $dati;    
+    }*/
+
+    public function getDati() {
+        $datitipo = array( 'nome', 'cognome', 'email', 'password', 'conf_password', 'giorno','mese','anno','sesso', 'comune' );
+        $dati=array();
+        foreach ( $datitipo as $data ) {
+            if( isset( $_REQUEST[ $data ] ) )
+               $dati[ $data ] = $_REQUEST[ $data ];    
         }
         return $dati;    
     }

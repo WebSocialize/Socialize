@@ -6,10 +6,12 @@
 
 class FDb{
     //attributi
-    protected $tabella;     //
+    protected $tabella;     
     protected $key;
     protected $class;
-    protected $_connection;
+    protected $connection;
+    protected $result;
+    protected $_auto_increment=false;
 
 
     //metodi
@@ -18,31 +20,31 @@ class FDb{
         $this->connect($config['mysql']['host'], $config['mysql']['password'], $config['mysql']['user'], $config['mysql']['database']);
     }
     
-//   public function connect($dataBase, $user, $password) {
+    public function connect($host, $user, $password,$database) {
         /*
          * connessione al server mysql e connessione ad un database passato per parametro  
          */
-    /*
-        $this->connection = mysql_connect('localhost', $password, $user);
+    
+        $this->connection = mysql_connect($host, $password, $user);
         if( !$this->connection ) {
             die( 'impossibile connettersi al server specificato' );
         }   
         else
-            $selected = mysql_select_db ( $dataBase, $this->connection );
+            $selected = mysql_select_db ( $database, $this->connection );
         if( !$selected )
             die( 'impossibile connettersi al Db specificato' );
         
         return true;
     }
-     */ 
+     
     
     
-    public function connect($host,$user,$password,$database) {
+ /*   public function connect($host,$user,$password,$database) {
         $this->_connection=mysql_connect($host,$password,$user);
         if (!$this->_connection) {
             die('Impossibile connettersi al database: ' . mysql_error());
         }
-        $db_selected = mysql_select_db($database, $this->_connection); echo $database;
+        $db_selected = mysql_select_db($database, $this->_connection);
         if (!$db_selected) {
             die ("Impossibile utilizzare $database: " . mysql_error());
         }
@@ -52,11 +54,14 @@ class FDb{
         return true;
 
     }
+    */
     
     /*
      * restituisce un oggetto caricando dal database, predendo in ingresso la p.k.
      */
-    public function load( $pk ){
+    /*public function load( $pk ){
+        echo $tabella;
+        echo $key;
         $query = sprintf("SELECT * FROM '{$this->tabella}' WHERE '{$pk}'='{$key}'");
         $result = mysql_query($query);
         if( !$result )
@@ -68,11 +73,44 @@ class FDb{
             return $obj;
         }
     }
+
+    */
     
+    public function load($key) {
+        $query='SELECT * ' .
+                'FROM `'.$this->tabella.'` ' .
+                'WHERE `'.$this->key.'` = \''.$key.'\'';
+        $ris = $this->query($query);
+        if( $ris ){
+            return $this->getObject();
+        }
+        else
+            return false;    
+    }
+
+    public function query($query) {
+        $this->result=mysql_query($query);
+        debug($query);
+        debug(mysql_error());
+        if (!$this->result)
+            return false;
+        else
+            return true;
+    }
+    public function getObject() { 
+        $numero_righe=mysql_num_rows($this->result);
+        //debug('Numero risultati:'. $numero_righe);
+        if ($numero_righe>0) {
+            $row = mysql_fetch_object($this->result,$this->class);
+            $this->result=false;
+            return $row;
+        } else
+            return false;
+    }
     /*
      * salva un oggetto nel database
      */
-    public function store( $obj ){
+    /*public function store( $obj ){
         $i = 0;
         $campo = '';
         $valore = '';
@@ -94,8 +132,34 @@ class FDb{
             return false;
         else
             return true;
+    }*/
+        public function store($object) {
+        $i=0;
+        $values='';
+        $fields='';
+        foreach ($object as $kay=>$value) {
+            if (!($this->_auto_increment && $kay == $this->key) && substr($kay, 0, 1)!='_') {
+                if ($i==0) {
+                    $fields.='`'.$kay.'`';
+                    $values.='\''.$value.'\'';
+                } else {
+                    $fields.=', `'.$kay.'`';
+                    $values.=', \''.$value.'\'';
+                }
+                $i++;
+            }
+        }
+        $query='INSERT INTO '.$this->tabella.' ('.$fields.') VALUES ('.$values.')';
+        $return = $this->query($query);
+        if ($this->_auto_increment) {
+            $query='SELECT LAST_INSERT_ID() AS `id`';
+            $this->query($query);
+            $result=$this->getResult();
+            return $result['id'];
+        } else {
+            return $return;
+        }
     }
-    
     /*
      * chiusura della connessione al server mysql
      */

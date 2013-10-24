@@ -6,15 +6,26 @@
 	<link rel="stylesheet" type="text/css" href="templates/template/css/fonts.css"  />
 	<link rel="stylesheet" type="text/css" href="templates/template/css/style.css"  />
 	
-	<script src="js/jquery.js"></script>
-	<script src="js/twitter.js"></script>
-	<script src="js/general.js"></script>
+ <meta charset="utf-8" />
+<title>jQuery UI Datepicker - Default functionality</title>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
+
+{literal}
+<script>
+$(function() {
+$( "#datepicker" ).datepicker();
+});
+</script>
+{/literal}
 	
 </head>
 <body>
 	<div id="wrapper">
 		<div id="header">
-			<a href="" id="logo">ROMAX</a>
+			<a href="templates/template/images/logo.png" id="logo">ROMAX</a>
 			<ul id="menu">
 				<li class="active"><a href="">home</a></li>
 				<li><a href="">login</a></li>

@@ -6,7 +6,7 @@ class FUtente extends FDb {
         $this->tabella = 'utente';
         $this->key = 'email';
         $this->class = 'EUtente';
-        USingleton :: getInstance('FDb');    //mettere USingleton nella cartella
+        USingleton::getInstance('FDb');    //mettere USingleton nella cartella
     }
 }
 ?>
