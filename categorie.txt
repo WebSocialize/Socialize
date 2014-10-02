@@ -1,0 +1,10 @@
+Cena
+Cinema
+Concerti
+Conferenza
+Discoteca
+Intrattenimento
+Karaoke
+Pranzo
+Sport
+Torneo

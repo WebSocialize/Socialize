@@ -1,207 +1,189 @@
 <?php
 
-/*
- * 
+/**
+ * @package Foundation
  */
+class FDb {
 
-class FDb{
     //attributi
-    protected $tabella;     
+    protected $tabella;
     protected $key;
     protected $class;
     protected $connection;
     protected $result;
-    protected $_auto_increment=false;
-
+    protected $_auto_increment = false;
+    protected $variabili;
 
     //metodi
     public function __construct() {
         global $config;
-        $this->connect($config['mysql']['host'], $config['mysql']['password'], $config['mysql']['user'], $config['mysql']['database']);
+        $this->connect($config['mysql']['host'], $config['mysql']['user'], $config['mysql']['password'], $config['mysql']['database']);
     }
-    
-    public function connect($host, $user, $password,$database) {
-        /*
-         * connessione al server mysql e connessione ad un database passato per parametro  
-         */
-    
-        $this->connection = mysql_connect($host, $password, $user);
-        if( !$this->connection ) {
-            die( 'impossibile connettersi al server specificato' );
-        }   
-        else
-            $selected = mysql_select_db ( $database, $this->connection );
-        if( !$selected )
-            die( 'impossibile connettersi al Db specificato' );
-        
-        return true;
-    }
-     
-    
-    
- /*   public function connect($host,$user,$password,$database) {
-        $this->_connection=mysql_connect($host,$password,$user);
-        if (!$this->_connection) {
-            die('Impossibile connettersi al database: ' . mysql_error());
-        }
-        $db_selected = mysql_select_db($database, $this->_connection);
-        if (!$db_selected) {
-            die ("Impossibile utilizzare $database: " . mysql_error());
-        }
-        debug('Connessione al database avvenuta correttamente');
 
-        $this->query('SET names \'utf8\'');
-        return true;
-
-    }
-    */
-    
-    /*
-     * restituisce un oggetto caricando dal database, predendo in ingresso la p.k.
+    /**
+     *  connessione al server mysql e connessione ad un database passato per parametro
      */
-    /*public function load( $pk ){
-        echo $tabella;
-        echo $key;
-        $query = sprintf("SELECT * FROM '{$this->tabella}' WHERE '{$pk}'='{$key}'");
-        $result = mysql_query($query);
-        if( !$result )
-            die( 'query failed' );
-        else {
-            //resituisco l'oggetto richiesto
-            $obj = mysql_fetch_object( $result, $this->class);
-            
-            return $obj;
+    public function connect($host, $user, $password, $database) {
+        $this->connection = mysql_connect($host, $user, $password);
+        if (!$this->connection) {
+            die('impossibile connettersi al server specificato');
         }
+        $selected = mysql_select_db($database, $this->connection);
+        if (!$selected)
+            die('impossibile connettersi al Db specificato');
+        return true;
     }
 
-    */
-    
+    /**
+     * effettua la ricerca sul database
+     * @return mixed Object o array di oggetti
+     * @param string $query Query sql da effettuare al db
+     */
+    public function ricerca($query) {
+        $this->query($query);
+        return $this->getObjectArray();
+    }
+
+    /**
+     * effettua la load di un oggetto dal db
+     * @param mixed $key la chiave primaria della tabella
+     */
     public function load($key) {
-        $query='SELECT * ' .
-                'FROM `'.$this->tabella.'` ' .
-                'WHERE `'.$this->key.'` = \''.$key.'\'';
-        $ris = $this->query($query);
-        if( $ris ){
-            return $this->getObject();
-        }
-        else
-            return false;    
+        $query = 'SELECT * ' .
+                'FROM `' . $this->tabella . '` ' .
+                'WHERE `' . $this->key . '` = \'' . $key . '\'';
+        $this->query($query);
+        return $this->getObject();
     }
 
+    /**
+     * effettua una query
+     * @param string $query query sql
+     * @return boolean
+     */
     public function query($query) {
-        $this->result=mysql_query($query);
-        debug($query);
-        debug(mysql_error());
+        $this->result = mysql_query($query);
         if (!$this->result)
             return false;
         else
             return true;
     }
-    public function getObject() { 
-        $numero_righe=mysql_num_rows($this->result);
-        //debug('Numero risultati:'. $numero_righe);
-        if ($numero_righe>0) {
-            $row = mysql_fetch_object($this->result,$this->class);
-            $this->result=false;
+
+    /**
+     * restituisce un oggetto a partire dalla t-pla caricata dal db
+     * @return boolean
+     */
+    public function getObject() {
+        $numero_righe = mysql_num_rows($this->result);
+        if ($numero_righe > 0) {
+            $row = mysql_fetch_object($this->result, $this->class);
+            $this->result = false;
             return $row;
-        } else
+        }
+        else
             return false;
     }
-    /*
-     * salva un oggetto nel database
+
+    /**
+     * restituisce un array di oggetti se ho più di una t-pla altrimenti un oggetto
+     * @return boolean
      */
-    /*public function store( $obj ){
-        $i = 0;
-        $campo = '';
-        $valore = '';
-        foreach( $obj as $key => $value ){
-            if( $i==0 ){
-                $campo = $campo.$key;
-                $valore = $valore.$value;
+    public function getObjectArray() {
+        $numero_righe = mysql_num_rows($this->result);
+        if ($numero_righe == 1) {
+            $row = mysql_fetch_object($this->result, $this->class);
+            $this->result = false;
+            return $row;
+        } elseif ($numero_righe > 1) {
+            $return = array();
+            while ($row = mysql_fetch_object($this->result, $this->class)) {
+                $return[] = $row;
             }
-            else{
-                $campo = $campo.','.$key;
-                $valore = $valore.','.$value;
-            }
-        
-        }    
-        
-        $query = "INSERT into '.$this->tabella.'('.$campo.') VALUES ('.$valore.')";    
-        $result = mysql_query($query);
-        if( !$result )
-            return false;
+            $this->result = false;
+            return $return;
+        }
         else
-            return true;
-    }*/
-        public function store($object) {
-        $i=0;
-        $values='';
-        $fields='';
-        foreach ($object as $kay=>$value) {
-            if (!($this->_auto_increment && $kay == $this->key) && substr($kay, 0, 1)!='_') {
-                if ($i==0) {
-                    $fields.='`'.$kay.'`';
-                    $values.='\''.$value.'\'';
+            return false;
+    }
+
+    /**
+     * carica una t-pla sul db a partire dall'oggetto
+     * @param oggetto $object
+     * @return type
+     */
+    public function store($object) {
+        $i = 0;
+        $values = '';
+        $fields = '';
+        foreach ($object as $kay => $value) {
+            if (!($this->_auto_increment && $kay == $this->key) && substr($kay, 0, 1) != '_') {
+                if ($i == 0) {
+                    $fields.='`' . $kay . '`';
+                    $values.='\'' . $value . '\'';
                 } else {
-                    $fields.=', `'.$kay.'`';
-                    $values.=', \''.$value.'\'';
+                    $fields.=', `' . $kay . '`';
+                    $values.=', \'' . $value . '\'';
                 }
                 $i++;
             }
         }
-        $query='INSERT INTO '.$this->tabella.' ('.$fields.') VALUES ('.$values.')';
+        $query = 'INSERT INTO ' . $this->tabella . ' (' . $fields . ') VALUES (' . $values . ')';
         $return = $this->query($query);
         if ($this->_auto_increment) {
-            $query='SELECT LAST_INSERT_ID() AS `id`';
+            $query = 'SELECT LAST_INSERT_ID() AS `id`';
             $this->query($query);
-            $result=$this->getResult();
+            $result = $this->getResult();
             return $result['id'];
         } else {
             return $return;
         }
     }
-    /*
+
+    /**
      * chiusura della connessione al server mysql
      */
-    public function close(){
+
+    public function close() {
         mysql_close($this->connection);
     }
-    
-    /*
+
+    /**
      * cancellare la tupla determinata dalla chiave $key dal db
+     * @param mixed $pk chiave primaria della tabella
+     * @return boolean
      */
-    public function delete($key){
-        $query = "DELETE FROM '.$this->tabella.'WHERE'.$pk.'=".$key;
+
+    public function delete($pk) {
+        $query = "DELETE FROM `" . $this->tabella . "` WHERE `" . $this->key . "`='" . $pk . "'";
         $result = mysql_query($query);
-        if( !$result )
+        if (!$result)
             return false;
         else
             return TRUE;
     }
-    
-    /*
+
+    /**
      * update della tupla determinata dalla chiave $key
+     * @return boolean
      */
-    public function update( $obj ){
-        $fields ='';
-        $i=0;
-        foreach( $obj as $key=>$value ){
-            if( $i==0)
-                $fields = $fields.$key.'='.$value;
+    public function update($obj) {
+        $fields = '';
+        $i = 0;
+        foreach ($obj as $key => $value) {
+            if ($i == 0)
+                $fields = $fields . $key . '=' . $value;
             else
-                $fields = $fields.','.$key.'='.$value;
-    
+                $fields = $fields . ',' . $key . '=' . $value;
         }
-        $arrayObject=get_object_vars($object);
-        $query = "UPDATE'.$this->tabella.'SET'.$fields.'WHERE'.$key.'=".$arrayObject[$this->key];
+        $arrayObject = get_object_vars($object);
+        $query = "UPDATE'.$this->tabella.'SET'.$fields.'WHERE'.$key.'=" . $arrayObject[$this->key];
         $result = mysql_query($query);
-        if( !$result )
+        if (!$result)
             return FALSE;
-        else 
+        else
             return true;
     }
-    
-    
-    
+
 }
+
 ?>

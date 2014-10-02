@@ -1,0 +1,83 @@
+body{
+	font-family: Arial;
+	text-align: center; 
+	}
+
+#form_register{
+	text-align: left; 
+	-moz-border-radius: 10px 10px 10px 10px;
+	-webkit-border-radius: 10px 10px 10px 10px;  
+	border-radius: 10px 10px 10px 10px;
+	width: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 0 1.5em 1.5em 1.5em;
+	margin: 0 auto;
+	overflow: hidden;
+	}	
+	
+#form_register fieldset{
+	border: none;
+	}
+		
+#form_register legend{
+	display: block;
+	font-size: 25px;
+	padding: 10px;
+	}
+
+#form_register label{
+	padding: 0px;
+	display: block;
+	font-size: 0.6em;
+	margin: 20px 0px 0px 0px;
+	}
+
+	/*LABEL GENERATO DA VALIDATE*/
+#form_register label.error{
+	color: #f33;
+	padding: 0;
+	margin: 2px 0 0 0;
+	font-size: 0.5em;
+	padding-left: 18px;
+	background-image: url('templates/template/images/error.png');
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	}
+
+/*imput text e password*/
+#form_register #reg_nome, #form_register #reg_cognome, #form_register #reg_email, #form_register #password, #form_register #conf_password{
+	height: 30px;
+	width: 200px;
+	display: block;
+	border: none;
+	font-size: 16px;
+	line-height: 28px;
+	}
+	
+/*imput type submit e reset*/
+#form_register #reg_submit 	{
+	height: 30px;
+	width: 220px;
+	color: #fff;
+	font-weight: bold;
+	opacity: 0.7;
+	border: 1px solid #999;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;  
+	border-radius: 10px;
+	-moz-box-shadow: 0 0 .5em rgba(0, 0, 0, .6);
+	-webkit-box-shadow: 0 0 .5em rgba(0, 0, 0, .6);
+	box-shadow: 0 0 .5em rgba(0, 0, 0, .6);
+	-webkit-appearance: none;
+	-moz-transition: opacity .5s;
+	-webkit-transition: opacity .5s;
+	-o-transition: opacity .5s;
+	transition: opacity .5s;
+	display: block;
+	}
+	
+#form_register #reg_submit{background: #0a0; margin-top: 40px;}
+	
+#form_register #reg_submit:hover,
+#form_register #reg_submit:active,

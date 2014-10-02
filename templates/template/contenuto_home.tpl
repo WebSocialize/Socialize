@@ -1,7 +1,7 @@
 <div class="details">
-					<a href=""><img src="templates/template/images/presentazione.jpg" width= 430 height=245 class="image"></a>
-					<h1>Welcome to Socialize</h1>
-					<p class="blackitalic">Praesent vestibulum molestie lacus. Aenean nonummy hendrerit mauris. Phasellus porta</p>
-					<p class="gray">Fusce suscipit varius mi. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla dui. Fusce feugiat malesuada odio.</p>
+					<img class="intro" src="templates/template/images/presentazione.jpg">
+					<h1>Benvenuti su Socialize!</h1>
+					<p class="blackitalic">La tua città e la tua gente a portata di mano.</p>
+					<p class="gray">Scopri gli eventi che si terranno nella tua città! Con Socialize basta un clic. Vuoi conoscere persone che condividono i tuoi interessi? Qui non ci sono confini!</p>
 					<div class="cb"></div>
 				</div>

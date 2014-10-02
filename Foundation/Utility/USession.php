@@ -7,7 +7,6 @@
 class USession {
     public function __construct() {
         session_start();
-        debug($_SESSION);
     }
     function imposta_valore($chiave,$valore) {
         $_SESSION[$chiave]=$valore;

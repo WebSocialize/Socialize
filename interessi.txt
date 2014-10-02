@@ -1,0 +1,11 @@
+Arte
+Cinema
+Discoteca
+Gossip
+Informatica
+Libri
+Motori
+Musica
+Politica
+Sport
+Videogiochi

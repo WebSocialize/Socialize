@@ -1,8 +1,8 @@
 <?php
-/*
- * classe view inizializza smarty e il suo ambiente di lavoro
- */
 
+/**
+ *@package View
+ */
 require 'lib/smarty/Smarty.class.php';
 
 class View extends Smarty {
@@ -14,7 +14,7 @@ class View extends Smarty {
         $this->cache_dir = 'templates/cache';
     }
     
-    /*
+    /**
      * funzione che assegna un template passato come parametro
      */
     public function setTemplate( $template ){

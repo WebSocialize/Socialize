@@ -1,0 +1,1 @@
+<p> Non sono presenti eventi su Socialize.</p>

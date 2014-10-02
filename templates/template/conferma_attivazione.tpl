@@ -1,0 +1,1 @@
+<p> Il tuo account è stato attivato con successo!! Effettua il login per entrare nel fantastico mondo di SOCIALIZE!! </p>
